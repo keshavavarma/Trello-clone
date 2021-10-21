@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import List from "./components/list/List";
 import store from "./utils/store";
 import { v4 as uuid } from "uuid";
@@ -6,12 +6,28 @@ import StoreApi from "./utils/storeApi";
 import InputContainer from "./components/input/InputContainer";
 import { makeStyles } from "@material-ui/core/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { db } from "./firebase";
+import {
+  collection,
+  query,
+  addDoc,
+  where,
+  getDocs,
+  QuerySnapshot,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  onSnapshot,
+  orderBy,
+  deleteDoc,
+  setDoc,
+} from "firebase/firestore";
 
 const useStyle = makeStyles((theme) => ({
   root: {
     display: "flex",
     minHeight: "100vh",
-    background: "green",
+    background: "pink",
     width: "100%",
     overflowY: "auto",
   },
@@ -19,28 +35,46 @@ const useStyle = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyle();
-  const [data, setData] = useState(store);
+  const [data, setData] = useState();
 
-  const addMoreCard = (title, listId) => {
+  useEffect(() => {
+    const q = query(collection(db, `users/9kJmphJPxM2yseOh8zsK/projects/`));
+    const unsub = onSnapshot(q, (snapshot) => {
+      setData(
+        snapshot.docs.map((doc) => {
+          return {
+            id: doc.id,
+            data: doc.data(),
+          };
+        })
+      );
+    });
+    return unsub;
+  }, []);
+
+  const addMoreCard = async (title, listId) => {
     const newCardId = uuid();
     const newCard = {
       id: newCardId,
       title,
     };
 
-    const list = data.lists[listId];
+    const list = data[0].data.lists[listId];
     list.cards = [...list.cards, newCard];
 
     const newState = {
-      ...data,
+      ...data[0].data,
       lists: {
-        ...data.lists,
+        ...data[0].data.lists,
         [listId]: list,
       },
     };
-    setData(newState);
+    await setDoc(
+      doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+      newState
+    );
   };
-  const addMoreList = (title) => {
+  const addMoreList = async (title) => {
     const newListId = uuid();
     const newList = {
       id: newListId,
@@ -48,70 +82,102 @@ function App() {
       cards: [],
     };
     const newState = {
-      listIds: [...data.listIds, newListId],
+      listIds: data[0].data.listIds
+        ? [...data[0].data.listIds, newListId]
+        : [newListId],
       lists: {
-        ...data.lists,
+        ...data[0].data.lists,
         [newListId]: newList,
       },
     };
-    setData(newState);
+    await setDoc(
+      doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+      newState
+    );
   };
-  const updateListTitle = (title, listId) => {
-    const list = data.lists[listId];
+  const updateListTitle = async (title, listId) => {
+    const list = data[0].data.lists[listId];
     list.title = title;
 
     const newState = {
-      ...data,
+      ...data[0].data,
       lists: {
-        ...data.lists,
+        ...data[0].data.lists,
         [listId]: list,
       },
     };
-    setData(newState);
+    await setDoc(
+      doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+      newState
+    );
   };
-  const onDragEnd = (result) => {
+
+  // to persist to database just remove the code for newState and setData() and add queries to the database
+
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
     console.log("destination", destination, "source", source, draggableId);
-
     if (!destination) {
       return;
     }
     if (type === "list") {
-      const newListIds = data.listIds;
+      const newListIds = data[0].data.listIds;
+
       newListIds.splice(source.index, 1);
       newListIds.splice(destination.index, 0, draggableId);
+
+      const newSate = {
+        listIds: newListIds,
+        lists: {
+          ...data[0].data.lists,
+        },
+      };
+
+      await setDoc(
+        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        newSate
+      );
       return;
     }
-    const sourceList = data.lists[source.droppableId];
-    const destinationList = data.lists[destination.droppableId];
+    const sourceList = data[0].data.lists[source.droppableId];
+    const destinationList = data[0].data.lists[destination.droppableId];
     const draggingCard = sourceList.cards.filter(
       (card) => card.id === draggableId
     )[0];
+    // filter returns an array, but we want only the object in that array so...we add [0]
+    console.log("draggingCard", draggingCard);
 
     if (source.droppableId === destination.droppableId) {
       sourceList.cards.splice(source.index, 1);
       destinationList.cards.splice(destination.index, 0, draggingCard);
       const newSate = {
-        ...data,
+        ...data[0].data,
         lists: {
-          ...data.lists,
+          ...data[0].data.lists,
           [sourceList.id]: destinationList,
         },
       };
-      setData(newSate);
+
+      await setDoc(
+        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        newSate
+      );
     } else {
       sourceList.cards.splice(source.index, 1);
       destinationList.cards.splice(destination.index, 0, draggingCard);
 
       const newState = {
-        ...data,
+        ...data[0].data,
         lists: {
-          ...data.lists,
+          ...data[0].data.lists,
           [sourceList.id]: sourceList,
           [destinationList.id]: destinationList,
         },
       };
-      setData(newState);
+      await setDoc(
+        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        newState
+      );
     }
   };
   return (
@@ -124,10 +190,12 @@ function App() {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {data.listIds.map((listId, index) => {
-                const list = data.lists[listId];
-                return <List list={list} key={listId} index={index} />;
-              })}
+              {data &&
+                data[0].data.listIds &&
+                data[0].data.listIds.map((listId, index) => {
+                  const list = data[0].data.lists[listId];
+                  return <List list={list} key={listId} index={index} />;
+                })}
               <InputContainer type="list" />
               {provided.placeholder}
             </div>

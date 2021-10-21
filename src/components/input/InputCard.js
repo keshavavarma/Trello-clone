@@ -35,11 +35,15 @@ export default function InputCard({ setOpen, listId, type }) {
   };
   const handleBtnConfirm = () => {
     if (type === "card") {
-      addMoreCard(title, listId);
+      if (title) {
+        addMoreCard(title, listId);
+      }
       setTitle("");
       setOpen(false);
     } else {
-      addMoreList(title);
+      if (title) {
+        addMoreList(title);
+      }
       setTitle("");
       setOpen(false);
     }
