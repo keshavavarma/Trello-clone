@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
     padding: "0",
   },
 }));
-export default function Card({ card, index }) {
+export default function Card({ card, index, list }) {
   const classes = useStyle();
   const [hover, setHover] = useState();
   const { deleteCard } = useContext(storeApi);
@@ -35,11 +35,16 @@ export default function Card({ card, index }) {
             onMouseLeave={() => setHover(false)}
           >
             {card.title}
-            {/* {hover && (
-              <IconButton className={classes.deleteBtn} onClick={deleteCard}>
+            {hover && (
+              <IconButton
+                className={classes.deleteBtn}
+                onClick={() => {
+                  deleteCard(index, list.id);
+                }}
+              >
                 <CloseIcon color="error" fontSize="small" />
               </IconButton>
-            )} */}
+            )}
           </Paper>
         </div>
       )}

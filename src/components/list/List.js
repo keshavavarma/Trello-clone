@@ -23,7 +23,7 @@ export default function List({ list, index }) {
         <div {...provided.draggableProps} ref={provided.innerRef}>
           <Paper className={classes.root} {...provided.dragHandleProps}>
             <CssBaseline />
-            <Title title={list.title} listId={list.id} />
+            <Title title={list.title} listId={list.id} index={index} />
             <Droppable droppableId={list.id}>
               {(provided) => (
                 <div
@@ -32,7 +32,7 @@ export default function List({ list, index }) {
                   className={classes.cardContainer}
                 >
                   {list.cards.map((card, index) => (
-                    <Card key={card.id} card={card} index={index} />
+                    <Card key={card.id} card={card} index={index} list={list} />
                   ))}
                   {provided.placeholder}
                 </div>

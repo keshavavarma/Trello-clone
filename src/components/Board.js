@@ -125,13 +125,36 @@ const Board = () => {
     );
   };
 
-  // const deleteCard = () => {
-  //   // delete card logic
-  // };
+  const deleteCard = async (index, listID) => {
+    const sourceList = data[0].data.lists[listID];
+    sourceList.cards.splice(index, 1);
+    const newState = {
+      ...data[0].data,
+      lists: {
+        ...data[0].data.lists,
+        [listID]: sourceList,
+      },
+    };
+    await setDoc(
+      doc(db, `users/${currentUser.uid}/projects/${data[0].id}`),
+      newState
+    );
+  };
 
-  // const deleteList = () => {
-  //   // delete List logic
-  // };
+  const deleteList = async (listID, index) => {
+    const newListIds = data[0].data.listIds;
+    newListIds.splice(index, 1);
+    const newLists = data[0].data.lists;
+    delete newLists[listID];
+    const newState = {
+      listIds: newListIds,
+      lists: newLists,
+    };
+    await setDoc(
+      doc(db, `users/${currentUser.uid}/projects/${data[0].id}`),
+      newState
+    );
+  };
 
   // to persist to database just remove the code for newState and setData() and add queries to the database
 
@@ -209,6 +232,8 @@ const Board = () => {
           addMoreCard,
           addMoreList,
           updateListTitle,
+          deleteCard,
+          deleteList,
         }}
       >
         <DragDropContext onDragEnd={onDragEnd}>

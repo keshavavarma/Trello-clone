@@ -27,7 +27,7 @@ const useStyle = makeStyles((theme) => ({
     padding: "0",
   },
 }));
-export default function Title({ title, listId }) {
+export default function Title({ title, listId, index }) {
   const [open, setOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const { updateListTitle, deleteList } = useContext(storeApi);
@@ -63,9 +63,14 @@ export default function Title({ title, listId }) {
           >
             {title}
           </Typography>
-          {/* <IconButton className={classes.deleteBtn} onClick={deleteList}> */}
-          <MoreHorizIcon />
-          {/* </IconButton> */}
+          <IconButton
+            className={classes.deleteBtn}
+            onClick={() => {
+              deleteList(listId, index);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
         </div>
       )}
     </div>
