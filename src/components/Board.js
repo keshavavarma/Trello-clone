@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import List from "./list/List";
-import store from "../utils/store";
 import { v4 as uuid } from "uuid";
 import StoreApi from "../utils/storeApi";
 import InputContainer from "./input/InputContainer";
@@ -8,37 +7,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../firebase";
-import {
-  collection,
-  query,
-  addDoc,
-  where,
-  getDocs,
-  QuerySnapshot,
-  doc,
-  updateDoc,
-  serverTimestamp,
-  onSnapshot,
-  orderBy,
-  deleteDoc,
-  setDoc,
-} from "firebase/firestore";
+import { collection, query, doc, onSnapshot, setDoc } from "firebase/firestore";
 import Header from "./header/Header";
-import DeleteArea from "../DeleteArea";
 
 const useStyle = makeStyles((theme) => ({
   root: {
     display: "flex",
     minHeight: "90vh",
-    // background: "rgb(63,9,121)",
-    // background:
-    //   "linear-gradient(297deg, rgba(63,9,121,1) 39%, rgba(4,0,255,1) 100%)",
-    // background: "rgb(131,58,180)",
-    // background:
-    //   "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)",
-    // background: "rgb(63,94,251)",
-    // background:
-    //   "radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)",
     width: "100%",
     padding: "1rem 0",
     overflowY: "auto",
@@ -63,7 +38,7 @@ const Board = () => {
       );
     });
     return unsub;
-  }, []);
+  }, [currentUser.uid]);
 
   const addMoreCard = async (title, listId) => {
     const newCardId = uuid();
@@ -160,7 +135,6 @@ const Board = () => {
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-    console.log("destination", destination, "source", source, draggableId);
     if (!destination) {
       return;
     }
@@ -178,7 +152,7 @@ const Board = () => {
       };
 
       await setDoc(
-        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        doc(db, `users/${currentUser.uid}/projects/${data[0].id}`),
         newSate
       );
       return;
@@ -189,7 +163,6 @@ const Board = () => {
       (card) => card.id === draggableId
     )[0];
     // filter returns an array, but we want only the object in that array so...we add [0]
-    console.log("draggingCard", draggingCard);
 
     if (source.droppableId === destination.droppableId) {
       sourceList.cards.splice(source.index, 1);
@@ -203,7 +176,7 @@ const Board = () => {
       };
 
       await setDoc(
-        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        doc(db, `users/${currentUser.uid}/projects/${data[0].id}`),
         newSate
       );
     } else {
@@ -219,7 +192,7 @@ const Board = () => {
         },
       };
       await setDoc(
-        doc(db, `users/9kJmphJPxM2yseOh8zsK/projects/${data[0].id}`),
+        doc(db, `users/${currentUser.uid}/projects/${data[0].id}`),
         newState
       );
     }

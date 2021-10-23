@@ -4,7 +4,6 @@ import ProtectedRoute from "./components/authentication/ProtectedRoute";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import { AuthProvider } from "./contexts/AuthContext";
-import Header from "./components/header/Header";
 
 function App() {
   return (

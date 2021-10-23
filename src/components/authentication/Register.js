@@ -1,13 +1,12 @@
 import { useRef, useState } from "react";
 import "./Register.css";
-import { v4 as uuid } from "uuid";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { updateProfile } from "@firebase/auth";
-import { addDoc, collection, doc } from "@firebase/firestore";
+import { addDoc, collection } from "@firebase/firestore";
 const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

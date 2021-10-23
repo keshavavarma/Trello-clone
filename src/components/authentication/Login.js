@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import "./Register.css";
 import Alert from "@mui/material/Alert";
-import GoogleIcon from "@mui/icons-material/Google";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
@@ -10,7 +9,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login, googleSignIn } = useAuth();
+  const { login } = useAuth();
   const history = useHistory();
 
   const submitHandler = async (e) => {
@@ -25,17 +24,6 @@ const Login = () => {
       console.log(error);
       setError(error.message);
       setLoading(false);
-    }
-  };
-
-  const googleHandler = async (e) => {
-    e.preventDefault();
-    try {
-      await googleSignIn();
-      history.push("/");
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
     }
   };
 
@@ -71,14 +59,6 @@ const Login = () => {
         <button disabled={loading} className="register_button" type="submit">
           {loading ? <CircularProgress color="inherit" /> : "Login"}
         </button>
-        {/* <button
-          disabled={loading}
-          className="register_button_google"
-          onClick={googleHandler}
-        >
-          <GoogleIcon />
-          <span>Login</span>
-        </button> */}
         <p>
           Don't have an Account?<Link to="/Register"> Register</Link>
         </p>
