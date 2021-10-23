@@ -71,14 +71,14 @@ const Login = () => {
         <button disabled={loading} className="register_button" type="submit">
           {loading ? <CircularProgress color="inherit" /> : "Login"}
         </button>
-        <button
+        {/* <button
           disabled={loading}
           className="register_button_google"
           onClick={googleHandler}
         >
           <GoogleIcon />
           <span>Login</span>
-        </button>
+        </button> */}
         <p>
           Don't have an Account?<Link to="/Register"> Register</Link>
         </p>

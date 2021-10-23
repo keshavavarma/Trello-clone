@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: white;
 }
 .registration_form {
   max-width: 30rem;
