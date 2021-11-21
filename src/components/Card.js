@@ -10,6 +10,8 @@ const useStyle = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    overflowWrap: "break-word",
+    maxWidth: "300px",
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(1),
   },

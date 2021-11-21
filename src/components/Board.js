@@ -131,8 +131,6 @@ const Board = () => {
     );
   };
 
-  // to persist to database just remove the code for newState and setData() and add queries to the database
-
   const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
     if (!destination) {

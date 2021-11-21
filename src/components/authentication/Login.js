@@ -59,6 +59,17 @@ const Login = () => {
         <button disabled={loading} className="register_button" type="submit">
           {loading ? <CircularProgress color="inherit" /> : "Login"}
         </button>
+        <button
+          disabled={loading}
+          className="register_button"
+          onClick={() => {
+            emailRef.current.value = "admin@gmail.com";
+            passwordRef.current.value = "admin1234";
+            console.log("entered");
+          }}
+        >
+          {loading ? <CircularProgress color="inherit" /> : "Guest Login"}
+        </button>
         <p>
           Don't have an Account?<Link to="/Register"> Register</Link>
         </p>

@@ -11,6 +11,7 @@ const useStyle = makeStyles((theme) => ({
   addCard: {
     padding: theme.spacing(1, 1, 1, 2),
     margin: theme.spacing(0, 1, 1, 1),
+    cursor: "pointer",
     background: "#EBECF0",
     "&:hover": {
       backgroundColor: "#00000040",
@@ -33,7 +34,7 @@ export default function InputContainer({ listId, type }) {
           onClick={() => setOpen(!open)}
         >
           <Typography>
-            {type === "card" ? "+ Add a Card" : "+ Add another List"}
+            {type === "card" ? "+ Add a Card" : "+ Add a List"}
           </Typography>
         </Paper>
       </Collapse>

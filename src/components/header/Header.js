@@ -32,15 +32,14 @@ const useStyle = makeStyles((theme) => ({
   },
   projectTitle: {
     border: "none",
-    background: "none",
+    // background: "none",
+    background: "rgba(0,0,0,0.5)",
     fontSize: "1.3rem",
     fontWeight: "bold",
     color: "white",
     padding: "1rem",
-    "&:hover": {
-      borderRadius: "0.5rem",
-      background: "rgba(0,0,0,0.5)",
-    },
+
+    borderRadius: "0.5rem",
   },
 }));
 
