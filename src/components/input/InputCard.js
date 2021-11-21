@@ -57,7 +57,8 @@ export default function InputCard({ setOpen, listId, type }) {
             autoFocus
             multiline
             onChange={handleOnChange}
-            onBlur={() => setOpen(false)}
+            // onBlur={() => setOpen(false)}
+            // the above line is causing some issue with the first mouse click on the Add card/list button in the adjacent div...https://stackoverflow.com/questions/58106099/react-onclick-not-firing-on-first-click-second-click-behaves-as-expected-simpl
             fullWidth
             inputProps={{
               className: classes.input,
@@ -71,7 +72,12 @@ export default function InputCard({ setOpen, listId, type }) {
           />
         </Paper>
       </div>
-      <div className={classes.confirm}>
+      <div
+        className={classes.confirm}
+        onClick={() => {
+          console.log("clicked");
+        }}
+      >
         <Button className={classes.btnConfirm} onClick={handleBtnConfirm}>
           {type === "card" ? "Add Card" : "Add List"}
         </Button>

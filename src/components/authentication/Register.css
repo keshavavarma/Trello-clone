@@ -70,3 +70,9 @@
   background-color: rgb(97, 100, 166);
   color: white;
 }
+.link {
+  color: rgb(97, 100, 166);
+}
+.link:hover {
+  font-weight: bold;
+}

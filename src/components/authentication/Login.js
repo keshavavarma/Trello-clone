@@ -71,7 +71,11 @@ const Login = () => {
           {loading ? <CircularProgress color="inherit" /> : "Guest Login"}
         </button>
         <p>
-          Don't have an Account?<Link to="/Register"> Register</Link>
+          Don't have an Account?
+          <Link className="link" to="/Register">
+            {" "}
+            Register
+          </Link>
         </p>
       </form>
     </div>
