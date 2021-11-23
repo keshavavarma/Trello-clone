@@ -18,6 +18,9 @@ const useStyle = makeStyles((theme) => ({
   deleteBtn: {
     padding: "0",
   },
+  cardTitle: {
+    maxWidth: "240px",
+  },
 }));
 export default function Card({ card, index, list }) {
   const classes = useStyle();
@@ -36,7 +39,7 @@ export default function Card({ card, index, list }) {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            {card.title}
+            <p className={classes.cardTitle}>{card.title}</p>
             {hover && (
               <IconButton
                 className={classes.deleteBtn}

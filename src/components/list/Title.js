@@ -8,12 +8,13 @@ const useStyle = makeStyles((theme) => ({
   editableTitleContainer: {
     margin: theme.spacing(1),
     display: "flex",
+    justifyContent: "space-between",
   },
   editableTitle: {
     cursor: "text",
     flexGrow: 1,
     wordBreak: "break-all",
-    maxWidth: "300px",
+    maxWidth: "240px",
     fontSize: "1.2rem",
     fontWeight: "bold",
   },
